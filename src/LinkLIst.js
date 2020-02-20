@@ -169,6 +169,7 @@ class LinkList{
     }
 }
 
+/* 节点类 */
 class Node{
     constructor(data){
         this.data = data;
