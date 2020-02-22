@@ -35,7 +35,10 @@ class DoubleLinkedList{
         }
     }
 
-    /* 向列表的特定位置(从零开始)插入一个新的项 */
+    /* 
+        向列表的特定位置(从零开始)插入一个新的项 
+        position:索引从零开始
+    */
     insert(position,element){
         let newNode = new Node(element);
         if(this.length === 0){
@@ -61,7 +64,10 @@ class DoubleLinkedList{
     
     }
 
-    /* 获取对应位置的元素 */
+    /* 
+        获取对应位置的元素
+        position:索引从零开始
+    */
     get(position){
         if(position === 0){
             return this.head;
@@ -79,7 +85,86 @@ class DoubleLinkedList{
 
     /* 返回元素在列表中的索引。如果列表中没有该元素返回-1 */
     indexOf(element){
+        let content = this.head;
+        let index = 0; 
+        while(element !== content.data){
+            content = content.next;
+            index+=1;
+        }
+        return index;
+    }
 
+    /* 
+        修改某个位置的元素,返回修改后的元素 
+        position:索引从零开始
+    */
+    update(position,element){
+        if (position === 0) {
+            this.head.data = element;
+            return this.head;
+        }else if(position === this.length - 1){
+            this.tail.data = element;
+            return this.tail;
+        }else{
+            let content = this.head;
+            while(position > 0){
+                content = content.next;
+                position-=1;
+            }
+            content.data = element;
+            return content;
+        }
+    }
+
+    /* 
+        从列表中的特定位置移除一项
+        position:索引从零开始
+    */
+    removeAt(position){
+        if (position === 0) {
+            let content = this.head;
+            let head = this.head.data;
+            [content.next.prev,this.head] = [null,content.next];
+            this.length-=1;
+            return head;
+        }else if(position === this.length - 1){
+            let last = this.tail.data;
+            let content = this.tail;
+            [content.prev.next,this.tail] = [null,content.prev];
+            this.length-=1;
+            return last;
+        }else{
+            let content = this.head;
+            while(position > 0){
+                content = content.next;
+                position-=1;
+            }
+            [content.prev.next,content.next.prev] = [content.next,content.prev];
+            this.length-=1;
+            return content.data;
+        }
+    }
+
+    /* 从列表中移除一项 */
+    remove(element){
+        if(element === this.head.data){
+            let content = this.head;
+            [content.next.prev,this.head] = [null,content.next];
+            this.length-=1;
+            return content.data;
+        }else if(element === this.tail.data){
+            let content = this.head;
+            [content.prev.next,this.tail] = [null,content.prev];
+            this.length-=1;
+            return content.data;
+        }
+        let content = this.head;
+        while(element !== content.data){
+            content = content.next;
+        }
+        [content.prev.next,content.next.prev] = [content.next,content.prev];
+        this.length-=1;
+        return content.data;
     }
 
     /* 判断链表是否为空 */
@@ -102,6 +187,26 @@ class DoubleLinkedList{
         str.push(current.data);
         return str.valueOf();
     }
+
+    valueOf(){
+        return this;
+    }
+
+    /* forwardString() : 返回正向遍历的节点字符串形式 */
+    forwardString(){
+        return this.toString();
+    }
+    /* backwordString() : 返回反向遍历的节点字符串形式  */
+    backwordString(){
+        let str = [];
+        let current = this.tail;
+        while(current.prev !== null){
+            str.push(current.data);
+            current = current.prev;
+        }
+        str.push(current.data);
+        return str.valueOf();
+    }
 }
 
 /* 节点类 */
@@ -118,7 +223,7 @@ link.append('张三');
 link.append('张三1');
 link.append('张三2');
 link.append(1234685);
-link.insert(2,'刘凯');
-console.log(link.toString());
-console.log(link.get(1));
+// link.insert(2,'刘凯');
+// console.log(link.remove("张三"));
+console.log(link.backwordString());
 // console.log(link.isEmpty());
